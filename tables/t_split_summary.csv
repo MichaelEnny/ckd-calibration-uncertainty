@@ -1,0 +1,4 @@
+split,n,pct_of_total,n_ckd,pct_ckd,n_notckd,pct_notckd
+train,279,69.8,174,62.4,105,37.6
+val,60,15.0,38,63.3,22,36.7
+test,61,15.2,38,62.3,23,37.7

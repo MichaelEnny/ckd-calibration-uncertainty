@@ -1,0 +1,6 @@
+model,cv_auc_mean,best_params
+LR,1.0,{'C': 0.001}
+RF,0.9997,"{'n_estimators': 100, 'min_samples_split': 10, 'max_features': 'sqrt', 'max_depth': 20}"
+XGB,0.9992,"{'subsample': 0.8, 'n_estimators': 100, 'max_depth': 3, 'learning_rate': 0.2, 'gamma': 0.5, 'colsample_bytree': 0.6}"
+SVM,1.0,"{'kernel': 'poly', 'gamma': 0.1, 'C': 1}"
+NB,1.0,{'var_smoothing': np.float64(1e-11)}
