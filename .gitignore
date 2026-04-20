@@ -1,0 +1,52 @@
+# ============================================================
+# PHI / Credentialed data — NEVER commit
+# ============================================================
+data/raw/
+data/external/
+
+# MIMIC credential and access files
+*mimic*credentials*
+*mimic*token*
+*mimic*key*
+*physionet*credentials*
+*.pem
+*.p12
+*.pfx
+*.key
+
+# ============================================================
+# Sensitive config
+# ============================================================
+.env
+.env.*
+secrets.json
+credentials.json
+config.local.*
+
+# ============================================================
+# Python artifacts
+# ============================================================
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ============================================================
+# Saved model binaries (large; reproduce via code)
+# ============================================================
+code/02_modeling/saved_models/
+
+# ============================================================
+# OS / editor noise
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
