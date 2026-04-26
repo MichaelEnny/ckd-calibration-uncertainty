@@ -1,0 +1,26 @@
+column,in_uci_clean,in_mimic_raw,imputed,imputation_note
+age,True,True,False,available directly
+bp,True,True,True,median=80 from UCI train (5 cells)
+sg,True,True,True,median=1.02 from UCI train (97 cells)
+al,True,True,True,median=0 from UCI train (50 cells)
+su,True,True,True,median=0 from UCI train (97 cells)
+rbc,True,True,False,available directly
+pc,True,True,True,mode=1 from UCI train (97 cells)
+pcc,True,True,True,mode=0 from UCI train (97 cells)
+ba,True,True,True,mode=0 from UCI train (97 cells)
+bgr,True,True,True,median=121 from UCI train (3 cells)
+bu,True,True,False,available directly
+sc,True,True,False,available directly
+sod,True,True,False,available directly
+pot,True,True,False,available directly
+hemo,True,True,True,median=12.65 from UCI train (2 cells)
+pcv,True,True,True,median=40 from UCI train (1 cells)
+wbcc,True,True,True,median=8000 from UCI train (3 cells)
+rbcc,True,True,True,median=4.8 from UCI train (3 cells)
+htn,True,True,False,available directly
+dm,True,True,False,available directly
+cad,True,True,False,available directly
+appet,True,True,True,mode=1 from UCI train (97 cells)
+pe,True,True,True,mode=0 from UCI train (97 cells)
+ane,True,True,False,available directly
+class,True,True,False,available directly

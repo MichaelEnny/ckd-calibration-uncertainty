@@ -131,7 +131,7 @@ def plot_compare(model_name, y_true,
         fontsize=11, y=1.01,
     )
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 

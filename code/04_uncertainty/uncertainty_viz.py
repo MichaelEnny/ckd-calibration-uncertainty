@@ -132,7 +132,7 @@ def plot_setsize_histograms(X_test, y_test, out_path: Path):
         fontsize=11, y=1.02,
     )
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"  Saved -> {out_path.name}")
 
@@ -197,7 +197,7 @@ def plot_sample_cases(X_test, y_test, out_path: Path,
         fontsize=9, pad=8,
     )
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"  Saved -> {out_path.name}")
 

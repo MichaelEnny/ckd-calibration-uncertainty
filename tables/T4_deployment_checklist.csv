@@ -1,0 +1,6 @@
+model,calibration_method,c1_discrimination,c2_calibration,c3_calib_stability,c4_cp_coverage,c5_cover_stability,c6_interpretability,c7_subgroup_equity,c8_transparency,total_score,max_possible
+LR,isotonic,FAIL,FAIL,FAIL,FAIL,FAIL,PASS,FAIL,PASS,4,16
+RF,isotonic,FAIL,FAIL,FAIL,FAIL,FAIL,PASS,FAIL,PASS,4,16
+XGB,isotonic,FAIL,FAIL,FAIL,FAIL,FAIL,FAIL,FAIL,PASS,2,16
+SVM,isotonic,FAIL,FAIL,FAIL,FAIL,FAIL,PASS,FAIL,PASS,4,16
+NB,base,FAIL,FAIL,FAIL,FAIL,FAIL,PASS,FAIL,PASS,4,16

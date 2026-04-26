@@ -197,9 +197,10 @@ def main():
     print(f"\n[3] Saved hyperparameter table -> tables/t_hyperparams.csv")
 
     # ── 4. Verify saved models ───────────────────────────────────
-    saved = list(MODELS_DIR.glob("*.pkl"))
-    print(f"\n[4] Models in saved_models/: {sorted(p.name for p in saved)}")
-    assert len(saved) == 5, f"Expected 5 .pkl files, found {len(saved)}"
+    saved = [p for p in MODELS_DIR.glob("*.pkl")
+             if not p.stem.startswith(("platt_", "isotonic_"))]
+    print(f"\n[4] Base models in saved_models/: {sorted(p.name for p in saved)}")
+    assert len(saved) == 5, f"Expected 5 base .pkl files, found {len(saved)}"
     print("    [PASS] all 5 model files present")
 
     # ── 5. Print summary ─────────────────────────────────────────

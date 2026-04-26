@@ -1,0 +1,6 @@
+model,mimic_coverage,mimic_avg_set_size,mimic_singleton_rate,mimic_empty_rate,coverage_drift
+LR,0.2371,1.0,1.0,0.0,0.5662
+RF,0.2062,0.8041,0.8041,0.1959,0.761
+XGB,0.2268,0.4742,0.4742,0.5258,0.7404
+SVM,0.2165,0.9381,0.9381,0.0619,0.7015
+NB,0.2474,0.9897,0.9897,0.0103,0.7362

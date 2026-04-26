@@ -1,0 +1,5 @@
+Five classifiers achieved perfect discrimination on the UCI CKD benchmark, then failed every external validation criterion when applied to MIMIC-IV hospital data. Isotonic recalibration reduced internal ECE to near zero. On MIMIC, calibration drift exceeded 0.67 for every model, conformal coverage fell from 0.967 or higher internally to 0.21--0.25, and no model scored above 4 out of 16 on the deployment readiness checklist.
+
+Perfect internal performance does not predict external readiness. At minimum, a complete evaluation requires calibration on external data from a different clinical setting, coverage-guaranteed uncertainty estimates, and an explicit check that both transfer under distributional shift. Discrimination on a held-out internal test set is not sufficient evidence for deployment.
+
+The eight-criterion framework introduced here offers one structured path to operationalizing those requirements. Each criterion has a defined threshold and a three-level scoring scheme that can be applied to any binary clinical prediction model. The framework is not a ceiling. It is a starting point for the kind of evaluation that should precede clinical use.

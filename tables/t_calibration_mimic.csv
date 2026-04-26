@@ -1,0 +1,6 @@
+model,calibration_method,mimic_ece,mimic_mce,mimic_brier,mimic_auroc,delta_ece
+LR,isotonic,0.7612,0.7684,0.7566,0.4853,0.739
+RF,isotonic,0.7526,0.7604,0.7526,0.5068,0.7526
+XGB,isotonic,0.6801,0.7812,0.6731,0.5793,0.6731
+SVM,isotonic,0.7554,0.7716,0.7489,0.483,0.7402
+NB,base,0.7526,0.7717,0.7526,0.4774,0.7362

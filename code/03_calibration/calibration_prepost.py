@@ -130,7 +130,7 @@ def plot_reliability_diagram(name: str,
     ax.legend(loc="lower right", fontsize=8)
 
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
