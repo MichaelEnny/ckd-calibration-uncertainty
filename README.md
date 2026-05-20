@@ -36,8 +36,7 @@ first_paper/
 │   └── figure_captions.md
 ├── references/                   # Source PDFs for all 30 cited works (31 files)
 ├── supplementary/                # Supplementary materials (S1–S4)
-├── README.md                     # This file
-└── TASK_DOCUMENT.md              # Step-by-step task guide for completing the paper
+└── README.md                     # This file
 ```
 
 ---
@@ -91,7 +90,7 @@ All figures generated at 300 DPI PNG; colorblind-safe palettes used throughout.
 
 ## Reproducibility
 
-See `TASK_DOCUMENT.md` for full task list and `code/README.md` for run instructions.  
+See `code/README.md` for run instructions.  
 All random seeds set to `42`. Python environment pinned in `requirements.txt`.  
 Supplementary materials S1–S4 document hyperparameter grids, all reliability diagrams, subgroup calibration tables, and full install/run instructions.
 
