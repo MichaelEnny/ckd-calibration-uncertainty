@@ -1,0 +1,54 @@
+\subsection{Datasets}
+
+Two datasets were used. The UCI CKD dataset served as the primary training and internal validation source~\cite{UCIDataset}. It contains 400 patient records collected from a hospital in Vellore, India, each described by 24 clinical and laboratory features alongside a binary CKD label. Of the 400 patients, 250 (62.5\%) carry a positive CKD diagnosis. Mean patient age was 51.6 years (SD 17.0). Features include continuous measurements such as serum creatinine, blood urea, hemoglobin, sodium, potassium, and packed cell volume, plus categorical variables for comorbidities (hypertension, diabetes, coronary artery disease) and urinary findings (red blood cell morphology, pus cells, bacteria).
+
+The MIMIC-IV Clinical Database Demo (version 2.2) provided a distributional stress-test cohort~\cite{Johnson2023}. This is a publicly available, open-access subset of MIMIC-IV released by PhysioNet specifically for pipeline development and workshop use; it contains 100 de-identified patients from Beth Israel Deaconess Medical Center in Boston and requires no credentialing. It is not a formally designed external validation set, and its use here is deliberately framed as a stress-test: the goal is to evaluate how each model behaves when applied to a population with different prevalence, missing features, and clinical context than the training data.
+
+Patients were included if serum creatinine was available on their first hospital admission, yielding 97 patients. CKD labeling used the CKD-EPI 2021 race-free equation: eGFR below 60\,mL/min/1.73\,m\textsuperscript{2} defined CKD-positive status. That threshold produced 23 CKD cases (23.7\%) and 74 controls. Mean age in the demo cohort was 61.7 years (SD 16.3). The dataset is fully de-identified; no human subjects review was required.
+
+\subsection{Preprocessing and Feature Harmonization}
+
+UCI preprocessing started with whitespace stripping across all categorical columns. Categorical features were mapped to binary 0/1 values. The target label was encoded as CKD\,=\,1, notCKD\,=\,0. Missing values in continuous features were replaced with the column median; categorical missing values were replaced with the column mode. Zero missing values remained after imputation across all 400 records.
+
+MIMIC harmonization used statistics from the UCI training fold only, to prevent any leakage from the external data into the model pipeline. Seven features present in the UCI schema are not routinely recorded in MIMIC: urine-specific gravity, urine sugar, pus cells (categorical), pus cell clumps, bacteria, appetite, and pedal edema. Each was filled with the UCI training-set median or mode as appropriate. Blood pressure came from ICU chartevents (item IDs 220179 and 220050, systolic range 60--250\,mmHg); where that source was missing, the MIMIC outpatient medical record table provided a fallback. That two-source approach resolved blood pressure for 94 of 97 patients. Laboratory values including serum creatinine, blood urea nitrogen, hemoglobin, albumin, potassium, sodium, glucose, hematocrit, WBC, and RBC were extracted from the MIMIC lab events table and averaged across each patient's first admission. Comorbidity flags for hypertension, diabetes, and coronary artery disease came from ICD-10 codes (I10, E11.x, I25.x). Anemia was defined as hemoglobin below 12\,g/dL in females and below 13.5\,g/dL in males.
+
+\subsection{Model Suite and Training}
+
+Records were split into training (70\%, $n$\,=\,279), validation (15\%, $n$\,=\,60), and test (15\%, $n$\,=\,61) subsets using stratified random sampling (random\_state\,=\,42). The MIMIC demo cohort was held back entirely as a stress-test set, with no records used during any training, validation, or calibration step.
+
+Five classifier families were selected to span the calibration behaviors seen in clinical ML: logistic regression (L2 regularization), random forest (ensemble, known for overconfident probabilities), XGBoost (gradient boosting, strong discrimination but typically miscalibrated), support vector machine (\texttt{probability=True}), and Gaussian naive Bayes~\cite{NiculescuMizil2005}. Hyperparameter tuning used five-fold stratified cross-validation on the training fold, optimizing AUROC. Logistic regression $C$ was tuned over \{0.001, 0.01, 0.1, 1, 10, 100\}. RF, XGB, and SVM used randomized search with up to 30 iterations over defined grids (full grids in Supplementary S1). Fitted models were saved with joblib. Software: Python 3.13, scikit-learn, XGBoost, MAPIE 1.3, netcal, pandas, numpy, matplotlib, joblib; full version pins in requirements.txt.
+
+\subsection{Calibration Evaluation}
+
+Pre-calibration metrics were computed on the UCI validation set for each model: Expected Calibration Error (ECE, 10 equal-width bins)~\cite{Guo2017}, Maximum Calibration Error (MCE), Brier Score, and Brier Skill Score relative to a naive prevalence baseline. ECE and MCE used the netcal library. Reliability diagrams used \texttt{CalibrationDisplay} from scikit-learn.
+
+Two post-hoc recalibration methods were fitted on the validation set. Platt scaling fits a logistic regression layer on the base model's raw scores~\cite{Platt1999} (\texttt{CalibratedClassifierCV}, \texttt{method='sigmoid'}, \texttt{cv='prefit'}). Isotonic regression fits a piecewise-constant monotone function~\cite{Zadrozny2002} (\texttt{method='isotonic'}). \texttt{FrozenEstimator} prevented any refitting of the base model in both cases. The test set was not used at any point during calibration fitting.
+
+Post-calibration metrics were computed on the UCI test set for the base, Platt-scaled, and isotonic-scaled variants. For external validation, the best variant per model (lowest ECE on the UCI test set) was applied to MIMIC. Calibration drift was MIMIC ECE minus UCI ECE for that variant.
+
+\subsection{Uncertainty Quantification}
+
+Uncertainty was quantified through split conformal prediction using the MAPIE library (\texttt{SplitConformalClassifier}, version 1.3)~\cite{Taquet2022,AngelopoulosBates2022}. Each base model's conformal predictor was fitted on the UCI validation set ($n$\,=\,60) using the least ambiguous class (LAC) conformity score: one minus the predicted probability of the most likely class. Target confidence was 0.90 ($\alpha$\,=\,0.10), so prediction sets should contain the true label for at least 90\% of test cases.
+
+Three metrics were computed on both the UCI test set and the MIMIC cohort: empirical coverage rate, average prediction set size, and singleton rate (the share of cases receiving exactly one class label). Coverage drift was UCI coverage minus MIMIC coverage.
+
+\subsection{Deployment Readiness Framework}
+
+Eight criteria were defined before analysis began, drawing on reporting standards for early-stage clinical AI evaluation~\cite{Vasey2022,Collins2024TRIPOD}. Each was scored PASS (threshold met, 2 points), MARGINAL (within 20\% of threshold, 1 point), or FAIL (0 points), for a maximum total of 16 points.
+
+\begin{enumerate}
+  \item Discrimination adequacy: AUROC $\geq 0.85$ on the external cohort.
+  \item Calibration adequacy: ECE $\leq 0.10$ on the external cohort.
+  \item Calibration stability: absolute calibration drift $\leq 0.05$.
+  \item Uncertainty coverage: conformal coverage $\geq 0.90$ on the external cohort.
+  \item Coverage stability: absolute coverage drift $\leq 0.05$.
+  \item Prediction interpretability: singleton rate $\geq 0.70$ on the external cohort.
+  \item Subgroup calibration equity: maximum ECE gap across subgroups $\leq 0.05$.
+  \item Transparency: full code and pipeline publicly available (automatic PASS).
+\end{enumerate}
+
+Subgroup analysis stratified the MIMIC cohort by age (below 65 vs.\ 65 and above), diabetes status, and hypertension status. Groups with fewer than 10 patients were excluded from ECE computation because bin-level estimates become unreliable at that scale.
+
+\subsection{Statistical Analysis}
+
+All metrics are point estimates on held-out test sets. Bootstrap confidence intervals (95\%, 1000 resamples, random\_state\,=\,42) were computed for AUROC and ECE on both cohorts. No hypothesis tests were run; the study is descriptive and evaluative.

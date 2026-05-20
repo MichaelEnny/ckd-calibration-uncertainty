@@ -1,0 +1,67 @@
+\documentclass[12pt]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{float}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{siunitx}
+
+\doublespacing
+
+% Figure path — all figures are in the figures/ subdirectory of this package
+\graphicspath{{figures/}}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+\title{Calibration, Uncertainty Communication, and Deployment Readiness\\
+       in CKD Risk Prediction: A Framework Evaluation Study}
+
+\author{Michael Eniolade\\
+        \small University of the Cumberlands\\
+        \small \href{mailto:meniolade20593@ucumberlands.edu}{meniolade20593@ucumberlands.edu}}
+
+\date{}
+\maketitle
+
+% ── Abstract ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\noindent\textbf{Keywords:} chronic kidney disease, probability calibration,
+conformal prediction, uncertainty quantification, deployment readiness,
+machine learning
+
+% ── Sections ──────────────────────────────────────────────────────────────────
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Methods}
+\input{sections/methods}
+
+\section{Results}
+\input{sections/results}
+
+\section{Discussion}
+\input{sections/discussion}
+
+\section{Conclusion}
+\input{sections/conclusion}
+
+% ── References ────────────────────────────────────────────────────────────────
+\clearpage
+\bibliographystyle{vancouver}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,392 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\title{Supplementary Materials\\
+\large Calibration, Uncertainty Communication, and Deployment Readiness\\
+in CKD Risk Prediction: A Framework Evaluation Study}
+
+\author{Michael Eniolade\\
+        \small University of the Cumberlands\\
+        \small \href{mailto:meniolade20593@ucumberlands.edu}{meniolade20593@ucumberlands.edu}}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\clearpage
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section*{S1 — Hyperparameter Search Grids}
+\addcontentsline{toc}{section}{S1 — Hyperparameter Search Grids}
+
+All classifiers were tuned using 5-fold stratified cross-validation on the
+UCI training fold ($n = 279$) with AUROC as the scoring metric.
+\texttt{GridSearchCV} (scikit-learn 1.5.2) was used throughout.
+Random seed: 42.
+
+\subsection*{Logistic Regression (LR)}
+
+Solver: \texttt{lbfgs}; max iterations: 1000; class weight: balanced.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Hyperparameter & Values searched \\
+\midrule
+$C$ (inverse regularization strength) & 0.001, 0.01, 0.1, 1, 10, 100 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Selected:} $C = 0.001$\quad\textbf{CV AUROC:} 1.0000
+
+\subsection*{Random Forest (RF)}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Hyperparameter & Values searched \\
+\midrule
+\texttt{n\_estimators}    & 100, 200 \\
+\texttt{max\_depth}       & 5, 10, 20, None \\
+\texttt{min\_samples\_split} & 2, 5, 10 \\
+\texttt{max\_features}    & ``sqrt'', ``log2'' \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Selected:} \texttt{n\_estimators}=100, \texttt{max\_depth}=20,
+\texttt{min\_samples\_split}=10, \texttt{max\_features}=``sqrt''\quad
+\textbf{CV AUROC:} 0.9997
+
+\subsection*{XGBoost (XGB)}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Hyperparameter & Values searched \\
+\midrule
+\texttt{n\_estimators}      & 100, 200 \\
+\texttt{max\_depth}         & 3, 5, 7 \\
+\texttt{learning\_rate}     & 0.05, 0.1, 0.2 \\
+\texttt{subsample}          & 0.8, 1.0 \\
+\texttt{colsample\_bytree}  & 0.6, 0.8, 1.0 \\
+\texttt{gamma}              & 0, 0.1, 0.5 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Selected:} \texttt{n\_estimators}=100, \texttt{max\_depth}=3,
+\texttt{learning\_rate}=0.2, \texttt{subsample}=0.8,
+\texttt{colsample\_bytree}=0.6, \texttt{gamma}=0.5\quad
+\textbf{CV AUROC:} 0.9992
+
+\subsection*{Support Vector Machine (SVM)}
+
+\texttt{probability=True} enabled internally. Class weight: balanced.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Hyperparameter & Values searched \\
+\midrule
+$C$            & 0.1, 1, 10, 100 \\
+\texttt{kernel}& ``rbf'', ``poly'' \\
+\texttt{gamma} & ``scale'', 0.1, 1.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Selected:} $C=1$, \texttt{kernel}=``poly'',
+\texttt{gamma}=0.1\quad\textbf{CV AUROC:} 1.0000
+
+\subsection*{Gaussian Naive Bayes (NB)}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Hyperparameter & Values searched \\
+\midrule
+\texttt{var\_smoothing} & $10^{-11}$, $10^{-9}$, $10^{-7}$, $10^{-5}$, $10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Selected:} \texttt{var\_smoothing}=$10^{-11}$\quad
+\textbf{CV AUROC:} 1.0000
+
+\subsection*{Post-hoc Calibration Methods}
+
+Applied after model selection using
+\texttt{sklearn.calibration.CalibratedClassifierCV} with
+\texttt{FrozenEstimator} to prevent base-model refitting.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Method & Parameters \\
+\midrule
+Platt scaling (sigmoid) & \texttt{method="sigmoid"}, \texttt{cv="prefit"} \\
+Isotonic regression     & \texttt{method="isotonic"}, \texttt{cv="prefit"} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Calibration fitting used the UCI validation fold ($n=60$, indices in
+\texttt{data/processed/uci\_splits.json}). Best variant per model selected
+by lowest ECE on the UCI test fold ($n=61$).
+
+\clearpage
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section*{S2 — Reliability Diagrams}
+\addcontentsline{toc}{section}{S2 — Reliability Diagrams}
+
+Reliability diagrams (calibration curves) are provided for all
+model--dataset combinations. Each diagram plots mean predicted probability
+($x$-axis) against fraction of positive cases per bin ($y$-axis); a
+perfectly calibrated model follows the diagonal. Bins: 10 equal-width
+bins. Figures generated at 300 DPI.
+
+Figures \ref{fig:s2a} and \ref{fig:s2b} in the main manuscript display the
+combined pre- and post-calibration reliability diagrams on the UCI test set.
+Figure \ref{fig:s2c} in the main manuscript displays MIMIC-IV reliability
+diagrams for the best-calibrated variant of each model.
+
+\subsection*{UCI Test Set — All Variants}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+File & Model & Variant \\
+\midrule
+\texttt{reliability\_compare\_LR.png}  & Logistic Regression & Base, Platt, Isotonic \\
+\texttt{reliability\_compare\_RF.png}  & Random Forest       & Base, Platt, Isotonic \\
+\texttt{reliability\_compare\_XGB.png} & XGBoost             & Base, Platt, Isotonic \\
+\texttt{reliability\_compare\_SVM.png} & SVM                 & Base, Platt, Isotonic \\
+\texttt{reliability\_compare\_NB.png}  & Naive Bayes         & Base, Platt, Isotonic \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{MIMIC-IV Stress-Test Cohort — Best-Calibrated Variant}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+File & Model & Best variant & MIMIC ECE \\
+\midrule
+\texttt{reliability\_mimic\_LR.png}  & Logistic Regression & Isotonic & 0.761 \\
+\texttt{reliability\_mimic\_RF.png}  & Random Forest       & Isotonic & 0.753 \\
+\texttt{reliability\_mimic\_XGB.png} & XGBoost             & Isotonic & 0.680 \\
+\texttt{reliability\_mimic\_SVM.png} & SVM                 & Isotonic & 0.755 \\
+\texttt{reliability\_mimic\_NB.png}  & Naive Bayes         & Base     & 0.753 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All MIMIC reliability diagrams show severe deviation above the diagonal,
+consistent with models trained on a 62.5\% CKD prevalence population being
+applied to a 23.7\% prevalence cohort. Each figure includes an inset
+reporting ECE, MCE, Brier Score, and AUROC.
+
+\clearpage
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section*{S3 — Subgroup Calibration on MIMIC-IV}
+\addcontentsline{toc}{section}{S3 — Subgroup Calibration on MIMIC-IV}
+
+Subgroup-level ECE was computed on the MIMIC-IV demo stress-test cohort
+($n = 97$) across three stratification variables: age group, diabetes
+mellitus (DM) status, and hypertension (HTN) status. ECE used 5
+equal-width bins to ensure stable estimates in small subgroups. Groups
+with fewer than 10 patients are marked ``---'' and excluded from
+criterion scoring.
+
+\subsection*{Subgroup ECE Values}
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Model & Age $<65$ ($n=55$) & Age $\geq 65$ ($n=42$) & DM=Yes & HTN=Yes & Overall ($n=97$) \\
+\midrule
+LR  & 0.852 & 0.643 & --- & --- & 0.761 \\
+RF  & 0.836 & 0.643 & --- & --- & 0.753 \\
+XGB & 0.754 & 0.605 & --- & --- & 0.680 \\
+SVM & 0.844 & 0.639 & --- & --- & 0.755 \\
+NB  & 0.818 & 0.667 & --- & --- & 0.753 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+DM=Yes and HTN=Yes subgroups each fell below the 10-patient minimum
+threshold after cohort construction and are excluded from ECE computation.
+
+\subsection*{Subgroup ECE Gap (Criterion 7)}
+
+The deployment readiness criterion requires maximum ECE gap across valid
+subgroups $\leq 0.05$. The gap is max(subgroup ECE) $-$ min(subgroup ECE).
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Model & Max ECE & Min ECE & Gap & Criterion 7 \\
+\midrule
+LR  & 0.852 & 0.643 & 0.209 & FAIL \\
+RF  & 0.836 & 0.643 & 0.194 & FAIL \\
+XGB & 0.754 & 0.605 & 0.148 & FAIL \\
+SVM & 0.844 & 0.639 & 0.205 & FAIL \\
+NB  & 0.818 & 0.605 & 0.213 & FAIL \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All models fail the subgroup equity criterion. Younger patients (age $<65$)
+show systematically worse calibration than older patients across all five
+models, ECE gaps 0.15--0.21. This pattern is a secondary effect of the
+overall calibration collapse: models overestimate CKD probability for all
+patients, and overestimation is more pronounced in younger patients who have
+lower true CKD prevalence in the demo cohort. Even the best subgroup
+(age $\geq 65$, ECE $\approx 0.64$) remains far above the acceptable
+threshold of ECE $\leq 0.10$.
+
+\clearpage
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section*{S4 — Reproducibility Instructions}
+\addcontentsline{toc}{section}{S4 — Reproducibility Instructions}
+
+All results are fully reproducible from raw data. The pipeline runs in
+approximately 5--10 minutes on a standard laptop.
+
+\subsection*{Software Environment}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Package & Version \\
+\midrule
+Python           & 3.11+ \\
+scikit-learn     & 1.5.2 \\
+xgboost          & 2.1.1 \\
+imbalanced-learn & 0.12.4 \\
+netcal           & 1.3.5 \\
+mapie            & 0.8.6 \\
+pandas           & 2.2+ \\
+numpy            & 1.26+ \\
+matplotlib       & 3.9+ \\
+joblib           & 1.4+ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Install all dependencies: \quad\texttt{pip install -r requirements.txt}
+
+\subsection*{Data Acquisition}
+
+\textbf{UCI CKD dataset.} Download \texttt{chronic\_kidney\_disease\_full.arff}
+from the UCI Machine Learning Repository (no account required):
+\url{https://archive.ics.uci.edu/dataset/336/chronic+kidney+disease}.
+Place the file in \texttt{first\_paper/data/raw/}.
+
+\textbf{MIMIC-IV Clinical Database Demo v2.2.} Download from PhysioNet
+(free account required; no credentialing needed for the demo release):
+\url{https://physionet.org/content/mimic-iv-demo/2.2/}.
+Extract to any local directory and set the path in
+\texttt{code/01\_data\_prep/extract\_mimic\_local.py}.
+
+\subsection*{Reproduction Steps}
+
+Run each script from the \texttt{first\_paper/} directory in the
+following order. All paths are relative to that directory.
+
+\begin{enumerate}
+\item \texttt{python code/01\_data\_prep/clean\_uci.py}\\
+      Output: \texttt{data/processed/uci\_ckd\_clean.csv},
+      \texttt{data/processed/uci\_splits.json}
+
+\item \texttt{python code/01\_data\_prep/extract\_mimic\_local.py}\\
+      Output: \texttt{data/processed/mimic\_ckd\_cohort.csv}
+
+\item \texttt{python code/01\_data\_prep/harmonize\_mimic.py}\\
+      Output: \texttt{data/processed/mimic\_ckd\_clean.csv},
+      \texttt{data/processed/schema\_comparison.csv}
+
+\item \texttt{python code/02\_modeling/train\_models.py}\\
+      Output: saved model \texttt{.pkl} files; Tables T1 and metadata CSVs
+
+\item \texttt{python code/03\_calibration/calibrate\_models.py}\\
+      Output: calibrated model files; pre-/post-calibration reliability
+      diagrams; Table T2 partial
+
+\item \texttt{python code/03\_calibration/external\_calibration.py}\\
+      Output: MIMIC reliability diagrams; Table T2 complete
+
+\item \texttt{python code/03\_calibration/bootstrap\_ci.py}\\
+      Output: 95\% bootstrap CI columns merged into Table T2
+
+\item \texttt{python code/04\_uncertainty/conformal\_uci.py}\\
+      Output: conformal model files; Table T3 partial; Figures F3a/F3b
+
+\item \texttt{python code/04\_uncertainty/mimic\_conformal.py}\\
+      Output: Table T3 complete
+
+\item \texttt{python code/05\_deployment\_checklist/subgroup\_calibration.py}\\
+      Output: subgroup ECE table (S3)
+
+\item \texttt{python code/05\_deployment\_checklist/score\_checklist.py}\\
+      Output: Table T4; Figure F4
+\end{enumerate}
+
+\subsection*{Expected Key Metrics}
+
+\textbf{Table T2 — Calibration summary (ECE and AUROC):}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Model & UCI ECE & UCI AUROC & MIMIC ECE & MIMIC AUROC \\
+\midrule
+LR  & 0.022 & 1.000 & 0.761 & 0.485 \\
+RF  & 0.000 & 1.000 & 0.753 & 0.507 \\
+XGB & 0.007 & 1.000 & 0.680 & 0.579 \\
+SVM & 0.015 & 1.000 & 0.755 & 0.483 \\
+NB  & 0.016 & 1.000 & 0.753 & 0.477 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Table T3 — Conformal prediction coverage:}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Model & UCI Coverage & MIMIC Coverage \\
+\midrule
+LR  & 0.803 & 0.237 \\
+RF  & 0.967 & 0.206 \\
+XGB & 0.967 & 0.227 \\
+SVM & 0.918 & 0.216 \\
+NB  & 0.984 & 0.247 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Random Seeds}
+
+All stochastic operations use \texttt{random\_state=42}: train/test
+splitting, cross-validation folds, Random Forest, XGBoost, and bootstrap
+resampling. Results are bit-for-bit identical across runs on the same
+machine and package versions.
+
+\end{document}

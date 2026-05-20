@@ -1,0 +1,207 @@
+\subsection{Cohort Characteristics}
+
+The UCI dataset included 400 patients, mean age 51.6 years (SD 17.0), CKD prevalence 62.5\% ($n$\,=\,250). Fourteen continuous and 10 binary categorical features were present. Preprocessing left zero missing values. The 70/15/15 split produced 279 training, 60 validation, and 61 test patients, each fold within one percentage point of the overall CKD prevalence.
+
+The MIMIC-IV demo stress-test cohort had 97 patients, mean age 61.7 years (SD 16.3). CKD prevalence was 23.7\% ($n$\,=\,23), substantially lower than the UCI training population (62.5\%), and reflecting a general hospital population rather than a nephrology referral center. Seven of the 24 model features were entirely absent from the demo and were imputed using UCI training-set statistics, meaning those columns carry no information specific to individual MIMIC patients. Blood pressure was recovered for 94 of 97 patients through ICU chartevents and outpatient records.
+
+\subsection{Baseline Discrimination}
+
+All five models reached AUROC 1.00 on the UCI test set (Table~\ref{tab:t1}). The dataset offers essentially no discrimination challenge once models are fitted. RF and SVM posted perfect F1, accuracy, sensitivity, and specificity. LR lagged on accuracy (0.77) and specificity (0.39), a pattern that points to a miscalibrated intercept pushing most probabilities above the decision threshold. XGB and NB achieved F1 of 0.987. Cross-validation AUROC during tuning was 0.999--1.000 across the board. The UCI benchmark appears saturated.
+
+% ── Table 1: Baseline Discrimination ──────────────────────────────────────────
+\begin{table}[ht]
+\centering
+\caption{Baseline discrimination on the UCI test set ($n$\,=\,61). All five models achieve AUROC 1.00. LR specificity of 0.391 reflects a miscalibrated decision boundary rather than poor discrimination.}
+\label{tab:t1}
+\begin{tabular}{lcccccc}
+\toprule
+Model & AUROC & AUPRC & F1 & Accuracy & Sensitivity & Specificity \\
+\midrule
+LR  & 1.000 & 1.000 & 0.844 & 0.770 & 1.000 & 0.391 \\
+RF  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\
+XGB & 1.000 & 1.000 & 0.987 & 0.984 & 0.974 & 1.000 \\
+SVM & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\
+NB  & 1.000 & 1.000 & 0.987 & 0.984 & 0.974 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Pre-Calibration Assessment}
+
+Before any post-hoc correction, calibration varied widely. LR was the weakest: ECE 0.263, MCE 0.483, Brier Score 0.164, Brier Skill Score 0.295. XGB was the strongest, with ECE 0.031, Brier Score 0.005, and a Brier Skill Score of 0.977. RF, SVM, and NB fell in between with ECE values of 0.053, 0.042, and 0.050. Reliability diagrams confirmed LR's systematic bias: underestimation at low predicted values, overestimation at the high end. XGB and SVM stayed close to the diagonal throughout (Figures~\ref{fig:f1a} and~\ref{fig:f1b}).
+
+% ── Figure 1a: Reliability Diagrams (LR, RF, XGB) ────────────────────────────
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.70\textwidth}
+  \includegraphics[width=\textwidth]{reliability_compare_LR}
+  \caption{LR}
+\end{subfigure}
+\\[0.6em]
+\begin{subfigure}[b]{0.70\textwidth}
+  \includegraphics[width=\textwidth]{reliability_compare_RF}
+  \caption{RF}
+\end{subfigure}
+\\[0.6em]
+\begin{subfigure}[b]{0.70\textwidth}
+  \includegraphics[width=\textwidth]{reliability_compare_XGB}
+  \caption{XGB}
+\end{subfigure}
+\caption{Reliability diagrams for LR, RF, and XGB before and after post-hoc calibration on the UCI test set. Each panel shows the uncalibrated model (grey), Platt scaling (pink), and isotonic regression (teal). The diagonal is perfect calibration. LR shows the largest pre-calibration deviation. Isotonic regression achieves the largest ECE reductions. (Continued in Figure~\ref{fig:f1b}.)}
+\label{fig:f1a}
+\end{figure}
+
+% ── Figure 1b: Reliability Diagrams (SVM, NB) ────────────────────────────────
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.70\textwidth}
+  \includegraphics[width=\textwidth]{reliability_compare_SVM}
+  \caption{SVM}
+\end{subfigure}
+\\[0.6em]
+\begin{subfigure}[b]{0.70\textwidth}
+  \includegraphics[width=\textwidth]{reliability_compare_NB}
+  \caption{NB}
+\end{subfigure}
+\caption{Reliability diagrams for SVM and NB before and after post-hoc calibration on the UCI test set (continued from Figure~\ref{fig:f1a}). Platt scaling raised SVM calibration error rather than reducing it. NB's uncalibrated variant outperformed both post-hoc variants.}
+\label{fig:f1b}
+\end{figure}
+
+\subsection{Post-Calibration Results}
+
+Isotonic regression cut ECE across the full model suite (Table~\ref{tab:t2}). LR dropped from 0.345 to 0.022 (95\% CI: 0.002, 0.050), a reduction of 0.323. RF reached ECE 0.000. XGB went from 0.019 to 0.007 (95\% CI: 0.000, 0.021). SVM improved from 0.031 to 0.015 (95\% CI: 0.000, 0.037). For NB, the uncalibrated model (ECE 0.016, 95\% CI: 0.000, 0.049) outperformed both post-hoc variants, so it was selected as NB's best model. Platt scaling produced inconsistent results: it helped LR but raised SVM's ECE from 0.031 to 0.307, likely because the SVM's decision scores and true probabilities do not have a monotone relationship on this dataset.
+
+\subsection{Distributional Stress-Test on MIMIC-IV Demo}
+
+Applying the best-calibrated variant of each model to the MIMIC demo cohort produced a sharp deterioration across every metric (Table~\ref{tab:t2}, Figure~\ref{fig:f2}). This outcome is expected given the two distributional differences: a 39-percentage-point prevalence gap and seven features imputed from UCI statistics rather than measured from individual patients. AUROC fell to 0.485 (LR), 0.507 (RF), 0.579 (XGB), 0.483 (SVM), and 0.477 (NB), all near or below chance. ECE reached 0.761 for LR (95\% CI: 0.673, 0.844), 0.753 for RF (95\% CI: 0.660, 0.835), 0.680 for XGB (95\% CI: 0.594, 0.777), 0.755 for SVM (95\% CI: 0.667, 0.837), and 0.753 for NB (95\% CI: 0.660, 0.835). Calibration drift ranged from 0.673 (XGB) to 0.753 (RF), far above the 0.05 threshold. XGB was the least poor performer on both AUROC and ECE, a pattern consistent with gradient boosting learning slightly more transferable representations under regularization.
+
+% ── Table 2: Calibration Summary ──────────────────────────────────────────────
+\begin{table}[ht]
+\centering
+\caption{Calibration summary for all five classifiers. Best variant selected by lowest ECE on the UCI test set. Bootstrap 95\% CIs in brackets. Calibration drift = MIMIC demo ECE $-$ UCI ECE. MIMIC results reflect distributional shift, not formal external validation.}
+\label{tab:t2}
+\begin{tabular}{llcccc}
+\toprule
+ & & \multicolumn{2}{c}{UCI Test Set} & \multicolumn{2}{c}{MIMIC-IV} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+Model & Variant & ECE [95\% CI] & AUROC & ECE [95\% CI] & AUROC \\
+\midrule
+LR  & Isotonic & 0.022 [0.002, 0.050] & 1.000 & 0.761 [0.673, 0.844] & 0.485 \\
+RF  & Isotonic & 0.000 [0.000, 0.000] & 1.000 & 0.753 [0.660, 0.835] & 0.507 \\
+XGB & Isotonic & 0.007 [0.000, 0.021] & 1.000 & 0.680 [0.594, 0.777] & 0.579 \\
+SVM & Isotonic & 0.015 [0.000, 0.037] & 1.000 & 0.755 [0.667, 0.837] & 0.483 \\
+NB  & Base     & 0.016 [0.000, 0.049] & 1.000 & 0.753 [0.660, 0.835] & 0.477 \\
+\midrule
+\multicolumn{6}{l}{\footnotesize Calibration drift (MIMIC ECE $-$ UCI ECE): LR 0.739, RF 0.753, XGB 0.673, SVM 0.740, NB 0.736.}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ── Figure 2: MIMIC Reliability Diagrams ──────────────────────────────────────
+\begin{figure}[H]
+\centering
+% Row 1
+\begin{subfigure}[b]{0.27\textwidth}
+  \includegraphics[width=\textwidth]{reliability_mimic_LR}
+  \caption{LR}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.27\textwidth}
+  \includegraphics[width=\textwidth]{reliability_mimic_RF}
+  \caption{RF}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.27\textwidth}
+  \includegraphics[width=\textwidth]{reliability_mimic_XGB}
+  \caption{XGB}
+\end{subfigure}
+\\[0.6em]
+% Row 2
+\begin{subfigure}[b]{0.27\textwidth}
+  \includegraphics[width=\textwidth]{reliability_mimic_SVM}
+  \caption{SVM}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.27\textwidth}
+  \includegraphics[width=\textwidth]{reliability_mimic_NB}
+  \caption{NB}
+\end{subfigure}
+\caption{Reliability diagrams for the best-calibrated variant of each classifier on the MIMIC-IV demo stress-test cohort. All curves fall below the diagonal, consistent with models trained on a 62.5\% CKD prevalence population being applied to a 23.7\% prevalence cohort with seven imputed features. ECE ranged from 0.680 (XGB) to 0.761 (LR). Results demonstrate distributional failure, not clinical deployment performance.}
+\label{fig:f2}
+\end{figure}
+
+\subsection{Conformal Prediction Coverage}
+
+On the UCI test set, four of five models met the 90\% coverage target (Table~\ref{tab:t3}, Figures~\ref{fig:f3a} and~\ref{fig:f3b}). NB achieved 0.984 coverage with a singleton rate of 1.00. RF and XGB both reached 0.967 coverage and singleton rates of 0.967. SVM achieved 0.918. LR fell short at 0.803, consistent with its miscalibrated probabilities undermining the conformity scores.
+
+Coverage collapsed on MIMIC. NB was highest at 0.247; the others ranged from 0.206 to 0.237. All five models fell below 0.30 against a 0.90 target. Coverage drift ranged from 0.566 (LR) to 0.761 (RF). The conformal guarantee holds only when calibration and test data come from the same distribution. These two cohorts are not exchangeable in that sense.
+
+% ── Table 3: Uncertainty Summary ──────────────────────────────────────────────
+\begin{table}[ht]
+\centering
+\caption{Conformal prediction results on the UCI test set and MIMIC-IV demo stress-test cohort (target coverage 0.90). Coverage drift = UCI coverage $-$ MIMIC coverage. Coverage collapse on MIMIC reflects distributional non-exchangeability, not a failure of the conformal method itself.}
+\label{tab:t3}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{UCI Test Set} & \multicolumn{3}{c}{MIMIC-IV} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+Model & Coverage & Avg Set & Singleton & Coverage & Avg Set & Singleton \\
+\midrule
+LR  & 0.803 & 1.066 & 0.934 & 0.237 & 1.000 & 1.000 \\
+RF  & 0.967 & 0.967 & 0.967 & 0.206 & 0.804 & 0.804 \\
+XGB & 0.967 & 0.967 & 0.967 & 0.227 & 0.474 & 0.474 \\
+SVM & 0.918 & 0.918 & 0.918 & 0.216 & 0.938 & 0.938 \\
+NB  & 0.984 & 1.000 & 1.000 & 0.247 & 0.990 & 0.990 \\
+\midrule
+\multicolumn{7}{l}{\footnotesize Coverage drift: LR 0.566, RF 0.761, XGB 0.740, SVM 0.701, NB 0.736.}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ── Figure 3a: Conformal Prediction Set Size Distribution ────────────────────
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{conformal_setsize_uci}
+\caption{Prediction set size distribution (UCI test set). Bar charts of set size (0\,=\,empty, 1\,=\,singleton, 2\,=\,ambiguous) per model. NB and RF produce the fewest ambiguous predictions. Coverage target is 0.90. (Individual-level display in Figure~\ref{fig:f3b}.)}
+\label{fig:f3a}
+\end{figure}
+
+% ── Figure 3b: Individual-Level Uncertainty Display ───────────────────────────
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{conformal_sample_uci}
+\caption{Individual-level uncertainty display for NB (top 50 UCI test patients, sorted by descending predicted probability). Bar colour reflects prediction set membership: red\,=\,CKD only, blue\,=\,not-CKD only, yellow\,=\,ambiguous (both classes). Markers indicate true label. Coverage target is 0.90. (Set size distribution in Figure~\ref{fig:f3a}.)}
+\label{fig:f3b}
+\end{figure}
+
+\subsection{Deployment Readiness Scores}
+
+No model passed the checklist (Table~\ref{tab:t4}, Figure~\ref{fig:f4}). Scores ran from 2 out of 16 (XGB) to 4 out of 16 (LR, RF, SVM, NB). The only passing criteria were prediction interpretability on UCI (singleton rate above 0.70) and transparency. Every model failed discrimination on MIMIC, calibration adequacy on MIMIC, calibration stability, conformal coverage on MIMIC, coverage stability, and subgroup equity. Subgroup ECE gaps across age strata ranged from 0.148 to 0.209, far above the 0.05 equity threshold. XGB scored lowest (2/16) because its MIMIC singleton rate of 0.474 also failed the interpretability criterion; the other four models passed interpretability on UCI but not on MIMIC.
+
+% ── Table 4: Deployment Checklist ─────────────────────────────────────────────
+\begin{table}[ht]
+\centering
+\caption{Deployment readiness scores for all five classifiers across eight criteria. P\,=\,PASS (2 pts), M\,=\,MARGINAL (1 pt), F\,=\,FAIL (0 pts). Maximum score is 16.}
+\label{tab:t4}
+\begin{tabular}{lcccccccccc}
+\toprule
+Model & Variant & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8 & Total \\
+\midrule
+LR  & Isotonic & F & F & F & F & F & P & F & P & 4/16 \\
+RF  & Isotonic & F & F & F & F & F & P & F & P & 4/16 \\
+XGB & Isotonic & F & F & F & F & F & F & F & P & 2/16 \\
+SVM & Isotonic & F & F & F & F & F & P & F & P & 4/16 \\
+NB  & Base     & F & F & F & F & F & P & F & P & 4/16 \\
+\bottomrule
+\multicolumn{11}{l}{\footnotesize C1\,=\,Discrimination; C2\,=\,Calibration; C3\,=\,Calib.\ Stability; C4\,=\,CP Coverage;}\\
+\multicolumn{11}{l}{\footnotesize C5\,=\,Coverage Stability; C6\,=\,Interpretability; C7\,=\,Subgroup Equity; C8\,=\,Transparency.}\\
+\end{tabular}
+\end{table}
+
+% ── Figure 4: Deployment Heatmap ──────────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{F4_deployment_heatmap}
+\caption{Deployment readiness heatmap. Rows are models; columns are the eight criteria. Green\,=\,PASS, orange\,=\,MARGINAL, red\,=\,FAIL. Total scores out of 16 are shown on the right. All models score 2--4 out of 16. The only passing criteria are interpretability (C6) and transparency (C8). Criteria C1--C7 that reference the stress-test cohort all fail, illustrating that internal performance does not predict behaviour under distribution shift.}
+\label{fig:f4}
+\end{figure}
