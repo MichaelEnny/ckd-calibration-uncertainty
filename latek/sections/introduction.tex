@@ -3,7 +3,7 @@
 
 Roughly 850 million people worldwide are estimated to have chronic kidney
 disease, and the global prevalence grew by 33\% between 1990 and 2017
-\citep{Francis2024}. Among people with diabetes, as many as 1 in 3 are
+\citep{Francis2024,KDIGO2024}. Among people with diabetes, as many as 1 in 3 are
 affected; among those with hypertension in high-income settings, the proportion
 reaches approximately 1 in 5 \citep{Francis2024}. By 2040, CKD is projected to
 rank fifth among leading causes of years of life lost globally
@@ -51,7 +51,12 @@ A 2023 systematic review commissioned to support CDC prevention guidelines
 reached a pointed conclusion: CKD risk prediction models need to be better
 calibrated and externally validated before incorporation into clinical guidelines
 \citep{GonzalezRocha2023}. No published study in the CKD literature has
-operationalized all three of these demands together. No existing work has jointly
+operationalized all three of these demands together. Current guidance for clinical
+prediction model evaluation calls for joint assessment of discrimination,
+calibration, fairness, and generalizability before deployment consideration
+\citep{Collins2024EvalPart1}, and the design of external validation studies
+requires attention to population comparability and feature completeness
+\citep{Riley2024EvalPart2}. No existing work has jointly
 evaluated calibration across multiple post-hoc correction methods, quantified
 uncertainty through a coverage-guaranteed conformal framework, and assessed
 deployment readiness through a structured multi-criterion checklist, all on the

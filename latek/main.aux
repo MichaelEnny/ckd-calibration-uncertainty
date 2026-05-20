@@ -1,0 +1,113 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{Francis2024,KDIGO2024}
+\citation{Francis2024}
+\citation{Francis2024}
+\citation{Krishnamurthy2021,Bai2022,Li2025,Sabanayagam2025}
+\citation{Tangri2016,Major2019,BravoZuniga2025}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
+\citation{VanCalster2019}
+\citation{EchouffoTcheugui2012}
+\citation{Campagner2025}
+\citation{Banerji2023}
+\citation{GonzalezRocha2023}
+\citation{Collins2024EvalPart1}
+\citation{Riley2024EvalPart2}
+\citation{Collins2024TRIPOD}
+\citation{UCIDataset}
+\citation{Johnson2023}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{5}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Datasets}{5}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Preprocessing and Feature Harmonization}{5}{subsection.2.2}\protected@file@percent }
+\citation{NiculescuMizil2005}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Model Suite and Training}{6}{subsection.2.3}\protected@file@percent }
+\citation{Guo2017}
+\citation{Platt1999}
+\citation{Zadrozny2002}
+\citation{Taquet2022,AngelopoulosBates2022}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Calibration Evaluation}{7}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Uncertainty Quantification}{7}{subsection.2.5}\protected@file@percent }
+\citation{Vasey2022,Collins2024TRIPOD}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Deployment Readiness Framework}{8}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Statistical Analysis}{9}{subsection.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{9}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Cohort Characteristics}{9}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Baseline Discrimination}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Baseline discrimination on the UCI test set ($n$\,=\,61). All five models achieve AUROC 1.00. LR specificity of 0.391 reflects a miscalibrated decision boundary rather than poor discrimination.}}{10}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:t1}{{1}{10}{Baseline discrimination on the UCI test set ($n$\,=\,61). All five models achieve AUROC 1.00. LR specificity of 0.391 reflects a miscalibrated decision boundary rather than poor discrimination}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Pre-Calibration Assessment}{10}{subsection.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Reliability diagrams for LR, RF, and XGB before and after post-hoc calibration on the UCI test set. Each panel shows the uncalibrated model (grey), Platt scaling (pink), and isotonic regression (teal). The diagonal is perfect calibration. LR shows the largest pre-calibration deviation. Isotonic regression achieves the largest ECE reductions. (Continued in Figure~\ref {fig:f1b}.)}}{11}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:f1a}{{1}{11}{Reliability diagrams for LR, RF, and XGB before and after post-hoc calibration on the UCI test set. Each panel shows the uncalibrated model (grey), Platt scaling (pink), and isotonic regression (teal). The diagonal is perfect calibration. LR shows the largest pre-calibration deviation. Isotonic regression achieves the largest ECE reductions. (Continued in Figure~\ref {fig:f1b}.)}{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Reliability diagrams for SVM and NB before and after post-hoc calibration on the UCI test set (continued from Figure~\ref {fig:f1a}). Platt scaling raised SVM calibration error rather than reducing it. NB's uncalibrated variant outperformed both post-hoc variants.}}{12}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:f1b}{{2}{12}{Reliability diagrams for SVM and NB before and after post-hoc calibration on the UCI test set (continued from Figure~\ref {fig:f1a}). Platt scaling raised SVM calibration error rather than reducing it. NB's uncalibrated variant outperformed both post-hoc variants}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Post-Calibration Results}{12}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Distributional Stress-Test on MIMIC-IV Demo}{13}{subsection.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Calibration summary for all five classifiers. Best variant selected by lowest ECE on the UCI test set. Bootstrap 95\% CIs in brackets. Calibration drift = MIMIC demo ECE $-$ UCI ECE. MIMIC results reflect distributional shift, not formal external validation.}}{13}{table.caption.4}\protected@file@percent }
+\newlabel{tab:t2}{{2}{13}{Calibration summary for all five classifiers. Best variant selected by lowest ECE on the UCI test set. Bootstrap 95\% CIs in brackets. Calibration drift = MIMIC demo ECE $-$ UCI ECE. MIMIC results reflect distributional shift, not formal external validation}{table.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Reliability diagrams for the best-calibrated variant of each classifier on the MIMIC-IV demo stress-test cohort. All curves fall below the diagonal, consistent with models trained on a 62.5\% CKD prevalence population being applied to a 23.7\% prevalence cohort with seven imputed features. ECE ranged from 0.680 (XGB) to 0.761 (LR). Results demonstrate distributional failure, not clinical deployment performance.}}{14}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:f2}{{3}{14}{Reliability diagrams for the best-calibrated variant of each classifier on the MIMIC-IV demo stress-test cohort. All curves fall below the diagonal, consistent with models trained on a 62.5\% CKD prevalence population being applied to a 23.7\% prevalence cohort with seven imputed features. ECE ranged from 0.680 (XGB) to 0.761 (LR). Results demonstrate distributional failure, not clinical deployment performance}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Conformal Prediction Coverage}{14}{subsection.3.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Conformal prediction results on the UCI test set and MIMIC-IV demo stress-test cohort (target coverage 0.90). Coverage drift = UCI coverage $-$ MIMIC coverage. Coverage collapse on MIMIC reflects distributional non-exchangeability, not a failure of the conformal method itself.}}{15}{table.caption.6}\protected@file@percent }
+\newlabel{tab:t3}{{3}{15}{Conformal prediction results on the UCI test set and MIMIC-IV demo stress-test cohort (target coverage 0.90). Coverage drift = UCI coverage $-$ MIMIC coverage. Coverage collapse on MIMIC reflects distributional non-exchangeability, not a failure of the conformal method itself}{table.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Prediction set size distribution (UCI test set). Bar charts of set size (0\,=\,empty, 1\,=\,singleton, 2\,=\,ambiguous) per model. NB and RF produce the fewest ambiguous predictions. Coverage target is 0.90. (Individual-level display in Figure~\ref {fig:f3b}.)}}{15}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:f3a}{{4}{15}{Prediction set size distribution (UCI test set). Bar charts of set size (0\,=\,empty, 1\,=\,singleton, 2\,=\,ambiguous) per model. NB and RF produce the fewest ambiguous predictions. Coverage target is 0.90. (Individual-level display in Figure~\ref {fig:f3b}.)}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Individual-level uncertainty display for NB (top 50 UCI test patients, sorted by descending predicted probability). Bar colour reflects prediction set membership: red\,=\,CKD only, blue\,=\,not-CKD only, yellow\,=\,ambiguous (both classes). Markers indicate true label. Coverage target is 0.90. (Set size distribution in Figure~\ref {fig:f3a}.)}}{16}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:f3b}{{5}{16}{Individual-level uncertainty display for NB (top 50 UCI test patients, sorted by descending predicted probability). Bar colour reflects prediction set membership: red\,=\,CKD only, blue\,=\,not-CKD only, yellow\,=\,ambiguous (both classes). Markers indicate true label. Coverage target is 0.90. (Set size distribution in Figure~\ref {fig:f3a}.)}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Deployment Readiness Scores}{17}{subsection.3.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Deployment readiness scores for all five classifiers across eight criteria. P\,=\,PASS (2 pts), M\,=\,MARGINAL (1 pt), F\,=\,FAIL (0 pts). Maximum score is 16.}}{17}{table.caption.9}\protected@file@percent }
+\newlabel{tab:t4}{{4}{17}{Deployment readiness scores for all five classifiers across eight criteria. P\,=\,PASS (2 pts), M\,=\,MARGINAL (1 pt), F\,=\,FAIL (0 pts). Maximum score is 16}{table.caption.9}{}}
+\citation{EchouffoTcheugui2012}
+\citation{Liou2024}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Deployment readiness heatmap. Rows are models; columns are the eight criteria. Green\,=\,PASS, orange\,=\,MARGINAL, red\,=\,FAIL. Total scores out of 16 are shown on the right. All models score 2--4 out of 16. The only passing criteria are interpretability (C6) and transparency (C8). Criteria C1--C7 that reference the stress-test cohort all fail, illustrating that internal performance does not predict behaviour under distribution shift.}}{18}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:f4}{{6}{18}{Deployment readiness heatmap. Rows are models; columns are the eight criteria. Green\,=\,PASS, orange\,=\,MARGINAL, red\,=\,FAIL. Total scores out of 16 are shown on the right. All models score 2--4 out of 16. The only passing criteria are interpretability (C6) and transparency (C8). Criteria C1--C7 that reference the stress-test cohort all fail, illustrating that internal performance does not predict behaviour under distribution shift}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{18}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}What the Distributional Stress-Test Reveals}{18}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}What Drove the External Failure}{19}{subsection.4.2}\protected@file@percent }
+\citation{Vazquez2022,Sreenivasan2025}
+\citation{AngelopoulosBates2022}
+\citation{EchouffoTcheugui2012}
+\citation{Tangri2016}
+\citation{Major2019}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Conformal Prediction as a Diagnostic Tool}{20}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Comparison to Published CKD Models}{20}{subsection.4.4}\protected@file@percent }
+\citation{Riley2024EvalPart3}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Limitations}{21}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Future Directions}{22}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{22}{section.5}\protected@file@percent }
+\bibstyle{vancouver}
+\bibdata{refs}
+\bibcite{Francis2024}{{1}{}{{}}{{}}}
+\bibcite{KDIGO2024}{{2}{}{{}}{{}}}
+\bibcite{Krishnamurthy2021}{{3}{}{{}}{{}}}
+\bibcite{Bai2022}{{4}{}{{}}{{}}}
+\bibcite{Li2025}{{5}{}{{}}{{}}}
+\bibcite{Sabanayagam2025}{{6}{}{{}}{{}}}
+\bibcite{Tangri2016}{{7}{}{{}}{{}}}
+\bibcite{Major2019}{{8}{}{{}}{{}}}
+\bibcite{BravoZuniga2025}{{9}{}{{}}{{}}}
+\bibcite{VanCalster2019}{{10}{}{{}}{{}}}
+\bibcite{EchouffoTcheugui2012}{{11}{}{{}}{{}}}
+\bibcite{Campagner2025}{{12}{}{{}}{{}}}
+\bibcite{Banerji2023}{{13}{}{{}}{{}}}
+\bibcite{GonzalezRocha2023}{{14}{}{{}}{{}}}
+\bibcite{Collins2024EvalPart1}{{15}{}{{}}{{}}}
+\bibcite{Riley2024EvalPart2}{{16}{}{{}}{{}}}
+\bibcite{Collins2024TRIPOD}{{17}{}{{}}{{}}}
+\bibcite{UCIDataset}{{18}{}{{}}{{}}}
+\bibcite{Johnson2023}{{19}{}{{}}{{}}}
+\bibcite{NiculescuMizil2005}{{20}{}{{}}{{}}}
+\bibcite{Guo2017}{{21}{}{{}}{{}}}
+\bibcite{Platt1999}{{22}{}{{}}{{}}}
+\bibcite{Zadrozny2002}{{23}{}{{}}{{}}}
+\bibcite{Taquet2022}{{24}{}{{}}{{}}}
+\bibcite{AngelopoulosBates2022}{{25}{}{{}}{{}}}
+\bibcite{Vasey2022}{{26}{}{{}}{{}}}
+\bibcite{Liou2024}{{27}{}{{}}{{}}}
+\bibcite{Vazquez2022}{{28}{}{{}}{{}}}
+\bibcite{Sreenivasan2025}{{29}{}{{}}{{}}}
+\bibcite{Riley2024EvalPart3}{{30}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\gdef \@abspage@last{27}

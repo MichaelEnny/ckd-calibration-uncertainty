@@ -1,0 +1,185 @@
+\begin{thebibliography}{10}
+
+\bibitem{Francis2024}
+Francis A, Harhay MN, Ong ACM, et~al.
+\newblock Chronic kidney disease and the global public health agenda: an
+  international consensus.
+\newblock Nature Reviews Nephrology. 2024;20:473-85.
+
+\bibitem{KDIGO2024}
+{KDIGO CKD Work Group}.
+\newblock {KDIGO} 2024 Clinical Practice Guideline for the Evaluation and
+  Management of Chronic Kidney Disease.
+\newblock Kidney International. 2024;105(4S):S117-314.
+
+\bibitem{Krishnamurthy2021}
+Krishnamurthy S, et~al.
+\newblock Machine learning prediction models for chronic kidney disease using
+  national health insurance claim data in {Taiwan}.
+\newblock Healthcare (Basel). 2021;9(5):546.
+
+\bibitem{Bai2022}
+Bai Q, Su C, Tang W, Li Y.
+\newblock Machine learning to predict end stage kidney disease in chronic
+  kidney disease.
+\newblock Scientific Reports. 2022;12:8377.
+
+\bibitem{Li2025}
+Li J, et~al.
+\newblock Machine learning models for predicting short-term progression in
+  patients with stage 4 chronic kidney disease: a multi-center validation
+  study.
+\newblock Scientific Reports. 2025;15:39285.
+
+\bibitem{Sabanayagam2025}
+Sabanayagam C, et~al.
+\newblock Artificial intelligence in chronic kidney disease management: a
+  scoping review.
+\newblock Theranostics. 2025;15(10):4566-78.
+
+\bibitem{Tangri2016}
+Tangri N, Grams ME, Levey AS, et~al.
+\newblock Multinational assessment of accuracy of equations for predicting risk
+  of kidney failure: a meta-analysis.
+\newblock JAMA. 2016;315(2):164-74.
+
+\bibitem{Major2019}
+Major RW, Shepherd D, Medcalf JF, et~al.
+\newblock The {Kidney Failure Risk Equation} for prediction of end stage renal
+  disease in {UK} primary care: an external validation and clinical impact
+  projection cohort study.
+\newblock PLOS Medicine. 2019;16(11):e1002955.
+
+\bibitem{BravoZuniga2025}
+Bravo-Zuniga JI, et~al.
+\newblock External validation, recalibration, and clinical utility of the
+  kidney failure risk equation in patients with advanced {CKD}: a nationwide
+  retrospective cohort analysis in {Peru}.
+\newblock BMC Nephrology. 2025;26:688.
+
+\bibitem{VanCalster2019}
+Van~Calster B, McLernon DJ, van Smeden M, Wynants L, Steyerberg EW.
+\newblock Calibration: the {Achilles} heel of predictive analytics.
+\newblock BMC Medicine. 2019;17:230.
+
+\bibitem{EchouffoTcheugui2012}
+Echouffo-Tcheugui JB, Kengne AP.
+\newblock Risk models to predict chronic kidney disease and its progression: a
+  systematic review.
+\newblock PLOS Medicine. 2012;9(11):e1001344.
+
+\bibitem{Campagner2025}
+Campagner A, Biganzoli EM, Balsano C, Cereda C, Cabitza F.
+\newblock Modeling unknowns: a vision for uncertainty-aware machine learning in
+  healthcare.
+\newblock International Journal of Medical Informatics. 2025;203:106014.
+
+\bibitem{Banerji2023}
+Banerji CRS, Chakraborti T, Harbron C, et~al.
+\newblock Clinical {AI} tools must convey predictive uncertainty for each
+  individual patient.
+\newblock Nature Medicine. 2023;29:2996-8.
+
+\bibitem{GonzalezRocha2023}
+Gonz{\'a}lez-Rocha A, Colli VA, Denova-Guti{\'e}rrez E.
+\newblock Risk prediction score for chronic kidney disease in healthy adults
+  and adults with type 2 diabetes: systematic review.
+\newblock Preventing Chronic Disease. 2023;20:220380.
+
+\bibitem{Collins2024EvalPart1}
+Collins GS, Dhiman P, Ma J, et~al.
+\newblock Evaluation of clinical prediction models (part 1): from development
+  to external validation.
+\newblock BMJ. 2024;384:e074819.
+
+\bibitem{Riley2024EvalPart2}
+Riley RD, Archer L, Snell KIE, et~al.
+\newblock Evaluation of clinical prediction models (part 2): how to undertake
+  an external validation study.
+\newblock BMJ. 2024;384:e074820.
+
+\bibitem{Collins2024TRIPOD}
+Collins GS, Moons KGM, Dhiman P, et~al.
+\newblock {TRIPOD+AI} statement: updated guidance for reporting clinical
+  prediction models that use regression or machine learning methods.
+\newblock BMJ. 2024;385:e078378.
+
+\bibitem{UCIDataset}
+Rubini L, Soundarapandian P, Eswaran P.
+\newblock Chronic {Kidney} {Disease} {Dataset}.
+\newblock UCI Machine Learning Repository. 2015.
+\newblock Accessed: 2025-12-01. \url{https://doi.org/10.24432/C5G020}.
+
+\bibitem{Johnson2023}
+Johnson AEW, Bulgarelli L, Shen L, et~al.
+\newblock {MIMIC-IV}, a freely accessible electronic health record dataset.
+\newblock Scientific Data. 2023;10:1.
+
+\bibitem{NiculescuMizil2005}
+Niculescu-Mizil A, Caruana R.
+\newblock Predicting good probabilities with supervised learning.
+\newblock In: Proceedings of the 22nd International Conference on Machine
+  Learning; 2005. p. 625-32.
+
+\bibitem{Guo2017}
+Guo C, Pleiss G, Sun Y, Weinberger KQ.
+\newblock On calibration of modern neural networks.
+\newblock In: Proceedings of the 34th International Conference on Machine
+  Learning; 2017. p. 1321-30.
+\newblock ArXiv:1706.04599.
+
+\bibitem{Platt1999}
+Platt J.
+\newblock Probabilistic outputs for support vector machines and comparisons to
+  regularized likelihood methods.
+\newblock In: Advances in Large Margin Classifiers. MIT Press; 1999. p. 61-74.
+
+\bibitem{Zadrozny2002}
+Zadrozny B, Elkan C.
+\newblock Transforming classifier scores into accurate multiclass probability
+  estimates.
+\newblock In: Proceedings of the 8th ACM SIGKDD International Conference on
+  Knowledge Discovery and Data Mining; 2002. p. 694-9.
+
+\bibitem{Taquet2022}
+Taquet V, Blot V, Morzadec T, Lacombe L, Brunel N.
+\newblock {MAPIE}: an open-source library for distribution-free uncertainty
+  quantification.
+\newblock arXiv preprint arXiv:220712274. 2022.
+
+\bibitem{AngelopoulosBates2022}
+Angelopoulos AN, Bates S.
+\newblock A gentle introduction to conformal prediction and distribution-free
+  uncertainty quantification.
+\newblock arXiv preprint arXiv:210707511. 2021.
+
+\bibitem{Vasey2022}
+Vasey B, Nagendran M, Campbell B, et~al.
+\newblock Reporting guideline for the early stage clinical evaluation of
+  decision support systems driven by artificial intelligence: {DECIDE-AI}.
+\newblock BMJ. 2022;377:e070904.
+
+\bibitem{Liou2024}
+Liou L, et~al.
+\newblock Assessing calibration and bias of a deployed machine learning
+  malnutrition prediction model within a large healthcare system.
+\newblock npj Digital Medicine. 2024;7:149.
+
+\bibitem{Vazquez2022}
+Vazquez J, Facelli JC.
+\newblock Conformal prediction in clinical medical sciences.
+\newblock Journal of Healthcare Informatics Research. 2022;6:241-52.
+
+\bibitem{Sreenivasan2025}
+Sreenivasan AP, et~al.
+\newblock Conformal prediction enables disease course prediction and allows
+  individualized diagnostic uncertainty in multiple sclerosis.
+\newblock npj Digital Medicine. 2025;8:224.
+
+\bibitem{Riley2024EvalPart3}
+Riley RD, Snell KIE, Archer L, et~al.
+\newblock Evaluation of clinical prediction models (part 3): calculating the
+  sample size required for an external validation study.
+\newblock BMJ. 2024;384:e074821.
+
+\end{thebibliography}

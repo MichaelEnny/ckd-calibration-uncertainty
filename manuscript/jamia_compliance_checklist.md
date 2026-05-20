@@ -18,10 +18,10 @@ Last verified: 2026-04-26
 
 | Item | Requirement | Status | Notes |
 |------|-------------|--------|-------|
-| Citation style | Vancouver (numbered) | PASS | references.bib with 21 entries |
-| Citation order | Consecutive by appearance | PASS | Ordered 1-21 in manuscript |
-| DOIs | Required where available | PASS | All articles include DOI |
-| URL references | Allowed with access date | ACTION | Add access date for ucickd2015 entry |
+| Citation style | Vancouver (numbered) | PASS | refs.bib with 30 entries; all cited |
+| Citation order | Consecutive by appearance | PASS | Ordered 1-30 in manuscript |
+| DOIs | Required where available | PASS | All journal/preprint entries include DOI; 3 older conference proceedings (Guo 2017, Niculescu-Mizil 2005, Platt 1999, Zadrozny 2002) predate standard DOI assignment |
+| URL references | Allowed with access date | PASS | Access date 2025-12-01 added to UCIDataset entry; entry changed to @article type to resolve BibTeX warnings |
 
 ## Figures
 
@@ -46,8 +46,8 @@ Last verified: 2026-04-26
 | Item | Requirement | Status | Notes |
 |------|-------------|--------|-------|
 | Ethics statement | Required; exemption acceptable | PASS | Both datasets publicly available, de-identified |
-| IRB waiver | Needed for human data | PASS | MIMIC-IV Demo is pre-approved public release |
-| Data availability | Must state where data can be obtained | PASS | Stated in cover letter and methods |
+| IRB waiver | Needed for human data | PASS | MIMIC-IV Clinical Database Demo v2.2 is open-access, no credentialing required; stated explicitly in methods as distributional stress-test, not formal external validation |
+| Data availability | Must state where data can be obtained | PASS | Stated in cover letter (stress-test framing), methods, and limitations |
 | MIMIC PhysioNet terms | Cite Johnson et al. 2023 | PASS | Reference 17 in bibliography |
 
 ## Supplementary materials
@@ -78,7 +78,11 @@ Last verified: 2026-04-26
 ## Pre-submission actions remaining
 
 1. Format manuscript body as Word document (.docx) with double spacing, 12pt font, page numbers.
-2. Add access date to ucickd2015 BibTeX entry (URL reference).
-3. Add table titles and abbreviation footnotes to T1-T4.
-4. Convert figure_captions.md into embedded captions in the Word document.
-5. Confirm author affiliation text matches institutional format required by JAMIA Open.
+2. Add table titles and abbreviation footnotes to T1-T4.
+3. Convert figure_captions.md into embedded captions in the Word document.
+4. Confirm author affiliation text matches institutional format required by JAMIA Open.
+
+## Completed
+
+- BibTeX warnings resolved: UCIDataset entry converted to @article type, access date added, `natbib[numbers,sort&compress]` option added to match Vancouver numbered style.
+- MIMIC-IV stress-test reframing applied across all sections (methods, results, discussion, conclusion, abstract, cover letter). Credentialing language removed.

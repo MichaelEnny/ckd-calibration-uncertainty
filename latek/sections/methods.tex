@@ -2,9 +2,9 @@
 
 Two datasets were used. The UCI CKD dataset served as the primary training and internal validation source~\cite{UCIDataset}. It contains 400 patient records collected from a hospital in Vellore, India, each described by 24 clinical and laboratory features alongside a binary CKD label. Of the 400 patients, 250 (62.5\%) carry a positive CKD diagnosis. Mean patient age was 51.6 years (SD 17.0). Features include continuous measurements such as serum creatinine, blood urea, hemoglobin, sodium, potassium, and packed cell volume, plus categorical variables for comorbidities (hypertension, diabetes, coronary artery disease) and urinary findings (red blood cell morphology, pus cells, bacteria).
 
-The MIMIC-IV Clinical Database (version 2.2) provided the external validation cohort~\cite{Johnson2023}. MIMIC-IV is a de-identified electronic health record dataset from Beth Israel Deaconess Medical Center in Boston. The study used the 100-patient public demonstration subset. Patients were included if serum creatinine was available on their first hospital admission, yielding 97 patients. CKD labeling used the CKD-EPI 2021 race-free equation: eGFR below 60\,mL/min/1.73\,m\textsuperscript{2} defined CKD-positive status. That threshold produced 23 CKD cases (23.7\%) and 74 controls. Mean age in the MIMIC cohort was 61.7 years (SD 16.3).
+The MIMIC-IV Clinical Database Demo (version 2.2) provided a distributional stress-test cohort~\cite{Johnson2023}. This is a publicly available, open-access subset of MIMIC-IV released by PhysioNet specifically for pipeline development and workshop use; it contains 100 de-identified patients from Beth Israel Deaconess Medical Center in Boston and requires no credentialing. It is not a formally designed external validation set, and its use here is deliberately framed as a stress-test: the goal is to evaluate how each model behaves when applied to a population with different prevalence, missing features, and clinical context than the training data.
 
-MIMIC-IV data were accessed under a PhysioNet credentialed license. The dataset is de-identified; use for research required completion of CITI human subjects training prior to data access. No new patient contact occurred and no institutional review board approval was required.
+Patients were included if serum creatinine was available on their first hospital admission, yielding 97 patients. CKD labeling used the CKD-EPI 2021 race-free equation: eGFR below 60\,mL/min/1.73\,m\textsuperscript{2} defined CKD-positive status. That threshold produced 23 CKD cases (23.7\%) and 74 controls. Mean age in the demo cohort was 61.7 years (SD 16.3). The dataset is fully de-identified; no human subjects review was required.
 
 \subsection{Preprocessing and Feature Harmonization}
 
@@ -14,15 +14,15 @@ MIMIC harmonization used statistics from the UCI training fold only, to prevent 
 
 \subsection{Model Suite and Training}
 
-Records were split into training (70\%, $n$\,=\,279), validation (15\%, $n$\,=\,60), and test (15\%, $n$\,=\,61) subsets using stratified random sampling (random\_state\,=\,42). The MIMIC cohort was held back entirely as an external test set, separate from any training or validation step.
+Records were split into training (70\%, $n$\,=\,279), validation (15\%, $n$\,=\,60), and test (15\%, $n$\,=\,61) subsets using stratified random sampling (random\_state\,=\,42). The MIMIC demo cohort was held back entirely as a stress-test set, with no records used during any training, validation, or calibration step.
 
-Five classifier families were selected to span the calibration behaviors seen in clinical ML: logistic regression (L2 regularization), random forest (ensemble, known for overconfident probabilities), XGBoost (gradient boosting, strong discrimination but typically miscalibrated), support vector machine (\texttt{probability=True}), and Gaussian naive Bayes. Hyperparameter tuning used five-fold stratified cross-validation on the training fold, optimizing AUROC. Logistic regression $C$ was tuned over \{0.001, 0.01, 0.1, 1, 10, 100\}. RF, XGB, and SVM used randomized search with up to 30 iterations over defined grids (full grids in Supplementary S1). Fitted models were saved with joblib. Software: Python 3.13, scikit-learn, XGBoost, MAPIE 1.3, netcal, pandas, numpy, matplotlib, joblib; full version pins in requirements.txt.
+Five classifier families were selected to span the calibration behaviors seen in clinical ML: logistic regression (L2 regularization), random forest (ensemble, known for overconfident probabilities), XGBoost (gradient boosting, strong discrimination but typically miscalibrated), support vector machine (\texttt{probability=True}), and Gaussian naive Bayes~\cite{NiculescuMizil2005}. Hyperparameter tuning used five-fold stratified cross-validation on the training fold, optimizing AUROC. Logistic regression $C$ was tuned over \{0.001, 0.01, 0.1, 1, 10, 100\}. RF, XGB, and SVM used randomized search with up to 30 iterations over defined grids (full grids in Supplementary S1). Fitted models were saved with joblib. Software: Python 3.13, scikit-learn, XGBoost, MAPIE 1.3, netcal, pandas, numpy, matplotlib, joblib; full version pins in requirements.txt.
 
 \subsection{Calibration Evaluation}
 
-Pre-calibration metrics were computed on the UCI validation set for each model: Expected Calibration Error (ECE, 10 equal-width bins), Maximum Calibration Error (MCE), Brier Score, and Brier Skill Score relative to a naive prevalence baseline. ECE and MCE used the netcal library. Reliability diagrams used \texttt{CalibrationDisplay} from scikit-learn.
+Pre-calibration metrics were computed on the UCI validation set for each model: Expected Calibration Error (ECE, 10 equal-width bins)~\cite{Guo2017}, Maximum Calibration Error (MCE), Brier Score, and Brier Skill Score relative to a naive prevalence baseline. ECE and MCE used the netcal library. Reliability diagrams used \texttt{CalibrationDisplay} from scikit-learn.
 
-Two post-hoc recalibration methods were fitted on the validation set. Platt scaling fits a logistic regression layer on the base model's raw scores (\texttt{CalibratedClassifierCV}, \texttt{method='sigmoid'}, \texttt{cv='prefit'}). Isotonic regression fits a piecewise-constant monotone function (\texttt{method='isotonic'}). \texttt{FrozenEstimator} prevented any refitting of the base model in both cases. The test set was not used at any point during calibration fitting.
+Two post-hoc recalibration methods were fitted on the validation set. Platt scaling fits a logistic regression layer on the base model's raw scores~\cite{Platt1999} (\texttt{CalibratedClassifierCV}, \texttt{method='sigmoid'}, \texttt{cv='prefit'}). Isotonic regression fits a piecewise-constant monotone function~\cite{Zadrozny2002} (\texttt{method='isotonic'}). \texttt{FrozenEstimator} prevented any refitting of the base model in both cases. The test set was not used at any point during calibration fitting.
 
 Post-calibration metrics were computed on the UCI test set for the base, Platt-scaled, and isotonic-scaled variants. For external validation, the best variant per model (lowest ECE on the UCI test set) was applied to MIMIC. Calibration drift was MIMIC ECE minus UCI ECE for that variant.
 
@@ -34,7 +34,7 @@ Three metrics were computed on both the UCI test set and the MIMIC cohort: empir
 
 \subsection{Deployment Readiness Framework}
 
-Eight criteria were defined before analysis began. Each was scored PASS (threshold met, 2 points), MARGINAL (within 20\% of threshold, 1 point), or FAIL (0 points), for a maximum total of 16 points.
+Eight criteria were defined before analysis began, drawing on reporting standards for early-stage clinical AI evaluation~\cite{Vasey2022,Collins2024TRIPOD}. Each was scored PASS (threshold met, 2 points), MARGINAL (within 20\% of threshold, 1 point), or FAIL (0 points), for a maximum total of 16 points.
 
 \begin{enumerate}
   \item Discrimination adequacy: AUROC $\geq 0.85$ on the external cohort.
